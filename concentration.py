@@ -1,51 +1,32 @@
 # Marcos Duran 100%
-import sys
-
 n = int(input())
-
-guessX = 1
-guessY = 2
-indeces = []
-cards = [0] * (2*n)
-matchCount = 0
-
+arr = ['0'] * (2*n)
+x = 1
+y = 2
+pairsFound = 0
 for i in range(n):
-   
-    # code below builds pairs of cards
-    print(str(guessX) + ' ' + str(guessY), flush = True)
-    valIn = input()
-   #indeces = [int(x) for x in input().split()]
-   
-    if "MATCH" == valIn:
-        #cards.insert(guessX-1, 0) # delete from deck
-        #cards.insert(guessY-1, 0)
-        guessX += 2
-        guessY += 2
-        matchCount += 1
-    elif valIn != "-1":
-        indeces = [int(x) for x in valIn.split()]
-        currX = guessX-1
-        currY = guessY-1
-        cards.insert(currX, indeces[0])
-        cards.insert(currY, indeces[1])
-        guessX += 2
-        guessY += 2
-    else: # if receive -1, quit immeadiately
+    print(x, y)
+    line = input().split()
+    if line[0] == "MATCH":
+        arr[x-1] = arr[y-1] = '0' #pair found
+        pairsFound+=1
+    elif line[0] == '-1':
         sys.exit()
-   
-    #code below correctly solves all pairs
-for i in range(0, 2*n):
-    if matchCount == n:break
-    if(cards[i] != 0):
-        for j in range(i + 1, 2*n):
-            if cards[j] == cards[i]:
-                print(i + 1, j + 1, flush = True)
-       
-                input()
-                cards[i] = 0
-                cards[j] = 0
-                matchCount += 1
-                break
-       
-       
-print("-1", flush = True)
+    else:
+        arr[x-1] = line[0]
+        arr[y-1] = line[1]
+    x += 2
+    y += 2
+while pairsFound < n:
+    for i in range(2*n):
+        if arr[i] != '0':
+            x = i
+            for j in range(i+1, 2*n):
+                if arr[j] == arr[i]:
+                    y = j
+                    print(x+1, y+1)
+                    pairsFound+=1
+                    arr[x] = arr[y] = '0'
+                    break
+            line = input()
+print(-1)
